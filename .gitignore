@@ -1,0 +1,4 @@
+# pyc
+**/__pycache__/
+# Avoid pushing real configuration
+api/config.json

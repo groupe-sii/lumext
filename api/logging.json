@@ -1,0 +1,48 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "verbose": {
+            "()": "logging.Formatter",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+            "format": "%(asctime)s [%(levelname)s]@%(name)s (%(threadName)s:%(module)s/%(filename)s/%(funcName)s): %(message)s"
+        },
+        "colored": {
+            "()": "coloredlogs.ColoredFormatter",
+            "format": "%(asctime)s\t%(levelname)s\t%(threadName)s\t%(name)s\t%(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "colored",
+            "stream": "ext://sys.stdout"
+        },
+        "file_handler": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "maxBytes": 5000000,
+            "backupCount": 5,
+            "formatter": "verbose",
+            "filename": "/var/log/lumext.log",
+            "mode": "a",
+            "encoding": "utf-8"
+        },
+        "file_handler_err": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            "maxBytes": 5000000,
+            "backupCount": 5,
+            "formatter": "verbose",
+            "filename": "/var/log/lumext_error.log",
+            "mode": "a",
+            "encoding": "utf-8"
+        }
+    },
+    "root": {
+        "handlers": ["console", "file_handler"],
+        "level": "TRIVIA"
+    }
+}

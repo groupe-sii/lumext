@@ -1,0 +1,26 @@
+{
+    "rabbitmq": {
+        "server": "",
+        "port": "",
+        "user": "",
+        "password": "",
+        "exchange": "",
+        "queue": "sii-lumext",
+        "routing_key": "sii-lumext",
+        "use_ssl": true
+    },
+    "ldap": {
+        "address": "ldaps://---------:636",
+        "user": "",
+        "secret": "user@domain",
+        "base": "dc=domain,dc=tld",
+        "domain": "domain.tld",
+        "search_timeout": 5,
+        "operation_timeout": 5,
+        "cacert_file": "/etc/ssl/certs/ca-certificates.crt",
+        "userAccountControl": 66048
+    },
+    "log": {
+        "config_path": "/opt/sii/lumext/etc/logging.json"
+    }
+}
