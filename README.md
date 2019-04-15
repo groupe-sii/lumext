@@ -4,7 +4,7 @@ LUMext is a vCD UI & API extension to manage LDAP-based organisation's users and
 
 This extension aims to provide a way to share a single LDAP server for multiple organisations to simplify the user management.
 
-## Scope
+## Features
 
 A this time, the extension supports only **users management** with the following actions available:
 
@@ -14,7 +14,21 @@ A this time, the extension supports only **users management** with the following
 * Reset password
 * Delete user
 
-In future releases, we plan to provide a support for LDAP **groups** to simplify the role management.
+### Todo
+
+In future releases, we plan to provide a support for LDAP **groups** to simplify the role management:
+
+* List groups
+* Create group
+* Edit group
+* Delete group
+* 'Attach to'/'Detach from' user
+
+Others stuff to-do:
+
+* Permission management: only enable the LUMExt for some users of an organization.
+* Continuous integration
+* Autodocumentation
 
 ### Screenshots
 
@@ -268,7 +282,7 @@ python ./deploy_api.py --user "administrator" \
 
 In order to work, LUMExt requires that the vCloud Director instance is configured with a RabbitMQ server.
 
-Please refer to the [vCloud Director's documentation](https://docs.vmware.com/en/vCloud-Director/9.7/com.vmware.vcloud.install.doc/GUID-8E4DD1BC-E038-499B-B1FD-02A05E1689AF.html?hWord=N4IghgNiBcIE5gEaIJYBcC2BHEBfIA) to setup the RabbitMQ AMQP broker.
+Please refer to the [vCloud Director's documentation](https://docs.vmware.com/en/vCloud-Director/9.7/com.vmware.vcloud.install.doc/GUID-8E4DD1BC-E038-499B-B1FD-02A05E1689AF.html) to setup the RabbitMQ AMQP broker.
 
 ![vCloud Director setup - AMQP](./docs/images/vclouddirector-setup-amqp.png)
 
@@ -278,8 +292,8 @@ To be usable in vCloud Director context, LDAP directory must be addedd as a *sys
 
 We recommend that:
 
-* You setup up the LDAP directory at system level.
-* Refer to the same configuration at organization level with a different base path for users lookup.
+* You [setup up the LDAP directory at system level](https://docs.vmware.com/en/vCloud-Director/9.7/com.vmware.vcloud.admin.doc/GUID-E751E805-54DB-4A14-8FA0-DB5CCFC069DA.html).
+* [Refer to the same configuration at organization level](https://docs.vmware.com/en/vCloud-Director/9.7/com.vmware.vcloud.admin.doc/GUID-65A484BE-67C5-4B72-8FFD-79A9899504D7.html) with a different base path for users lookup.
 
 **For example:**
 
