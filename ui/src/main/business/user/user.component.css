@@ -1,0 +1,123 @@
+form {
+  display: inline;
+  margin: 0px;
+  padding: 0px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  padding-left: 0;
+}
+
+.form-line {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 0 10%;
+}
+
+.password-line {
+  height: 30px;
+}
+
+.button-refresh {
+  min-width: 0px;
+  width: 30px;
+  margin-right: 12px !important;
+}
+
+.error-message {
+  color: red;
+  font-size: 11px;
+}
+
+.div-error-message {
+  height: 25px;
+  margin-left: 230px;
+}
+
+.password {
+  width: 150px;
+  background: #d8d8d8;
+  font-weight: 600;
+}
+
+.icon-visible {
+  height: 20px;
+  width: 20px;
+}
+
+.error-message {
+  width: 182px !important;
+  background: rgb(218, 38, 38) !important;
+}
+
+.icon-error {
+  color: red;
+}
+
+.line-description {
+  margin-top: 15px;
+}
+
+.tooltip.tooltip-bottom-left > .tooltip-content:before,
+.tooltip .tooltip-content.tooltip-bottom-left:before {
+  position: absolute;
+  top: -0.375rem;
+  right: 0;
+  bottom: auto;
+  left: auto;
+  content: "";
+  border-right: 0.25rem solid rgb(218, 38, 38);
+  border-bottom: 0.20833rem solid rgb(218, 38, 38);
+  border-left: 0.25rem solid transparent;
+  border-top: 0.20833rem solid transparent;
+}
+
+input {
+  border-bottom: none !important;
+  background: none !important;
+  margin-bottom: 0px;
+  margin-right: 0px !important; 
+}
+
+.input-group {
+  border-bottom: 1px solid #9a9a9a;
+  width: 150px;
+  display: flex;
+  flex-direction: row;
+  margin-right: 10px;
+  height: 30px;
+}
+
+.invalid-input {
+  border-bottom: 1px solid rgb(218, 38, 38);
+}
+
+.tooltip-error {
+  width: 20px;
+}
+
+.icon-transparent {
+  opacity: 0;
+}
+
+.textarea-group {
+  width: 100%;
+}
+
+.button-generate {
+  justify-content: center;
+}
+
+.hover {
+  cursor: pointer;
+}
+
+.tooltip-content {
+  text-transform: none;
+}
+
+.tooltip-refresh {
+  margin-left: 10px !important;
+}

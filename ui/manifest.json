@@ -1,0 +1,14 @@
+{
+    "urn": "vmware:vcloud:sii:lumext",
+    "name": "LUMExt",
+    "containerVersion": "9.1.0",
+    "version": "1.0.0",
+    "scope": ["tenant", "service-provider"],
+    "permissions": [],
+    "description": "LUMext is a vCD UI & API extension to manage LDAP-based organisation's users through vCD.",
+    "vendor": "SII",
+    "license": "MIT",
+    "link": "https://github.com/groupe-sii/lumext",
+    "module": "LumextModule",
+    "route": "lumext"
+}

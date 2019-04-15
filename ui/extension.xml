@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vmext:Service xmlns="http://www.vmware.com/vcloud/v1.5" xmlns:vmext="http://www.vmware.com/vcloud/extension/v1.5" name="sii-lumext">
+	<vmext:Namespace>Lumext</vmext:Namespace>
+	<vmext:Enabled>true</vmext:Enabled>
+	<vmext:AuthorizationEnabled>false</vmext:AuthorizationEnabled>
+	<vmext:RoutingKey>sii-lumext</vmext:RoutingKey>
+	<vmext:Exchange>systemExchange</vmext:Exchange>
+	<vmext:ApiFilters>
+		<vmext:ApiFilter>
+			<vmext:UrlPattern>(/api/org/.*/lumext/user/*[a-zA-Z0-9\_\-]*)|(/api/org/.*/lumext/group/*[a-zA-Z0-9\_\-]*)</vmext:UrlPattern>
+		</vmext:ApiFilter>
+	</vmext:ApiFilters>
+</vmext:Service>
