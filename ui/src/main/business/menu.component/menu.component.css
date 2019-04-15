@@ -1,0 +1,49 @@
+.menu-max-height {
+  height: 100%;
+}
+
+.selected {
+  font-weight: 600 !important;
+  background-color: #ffffff;
+}
+
+.child-menu {
+  padding-left: 35px !important;
+}
+
+.no-selected {
+  font-weight: 400 !important;
+}
+
+.menu-separated {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 1000px;
+  padding-bottom: 0.5rem;
+}
+
+.menu-parent {
+  padding: 0 15px !important;
+  flex: 0 0 1.5rem;
+  border: none;
+  height: 1.5rem;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+  outline-offset: -5px;
+  display: flex;
+  flex: 1 1 auto;
+  color: inherit;
+  overflow: hidden;
+  text-align: left;
+  justify-content: space-between;
+}
+
+.unrotateX  {
+    transform: rotate(90deg);
+}
+
+.rotateX  {
+  transform: rotate(180deg);
+}

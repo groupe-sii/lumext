@@ -14,6 +14,8 @@ A this time, the extension supports only **users management** with the following
 * Reset password
 * Delete user
 
+LUMExt support both LDAP or LDAPs protocols and, at least, *Active Directory* based LDAP server.
+
 ### Todo
 
 In future releases, we plan to provide a support for LDAP **groups** to simplify the role management:
@@ -52,7 +54,7 @@ LUMExt is based on a the [vCloud Director Extension SDK](https://github.com/vmwa
 
 The following architecture is used for LUMExt deployement
 
-![Architecture overview](./docs/images/architecture.svg)
+![Architecture overview](./docs/images/architecture_overview.png)
 
 ### LDAP structure
 
@@ -78,6 +80,10 @@ Each Organization's OU is named according to the Org-ID (ex: `5eb80c89-06bc-4650
 
 *Base OU* can be configured in the settings of LUMExt API service to point in a specific point of the LDAP directory based on its LDAP path.
 
+Example of a LDAP structure in an *Active Directory* server:
+
+![LDAP Structure example](./docs/images/ldap_structure_example.png)
+
 ## LUMExt-API
 
 *LUMExt-API* is the backend server used to:
@@ -102,7 +108,7 @@ yum install git
 
 # Create env variable
 echo "export LUMEXT_HOME=/opt/sii/lumext" > /etc/profile.d/lumext.sh
-echo "export LUMEXT_CONFIGURATION_FILE_PATH=/opt/sii/lumext/etc/config.json" >> /etc/profile.d/lumext.sh
+echo "export LUMEXT_CONFIGURATION_FILE_PATH=/opt/sii/lumext/etc/config.yaml" >> /etc/profile.d/lumext.sh
 chmod 755 /etc/profile.d/lumext.sh
 
 # Create folder structure
@@ -127,43 +133,45 @@ Before running LUMExt-API, it is necessary to configure it.
 
 ```bash
 # Copy configuration sample
-cp config.sample.json $LUMEXT_CONFIGURATION_FILE_PATH
+cp config.sample.yaml $LUMEXT_CONFIGURATION_FILE_PATH
 # Copy log configuration (so you will be able to edit it for your purpose)
 cp logging.json $LUMEXT_HOME/etc
 ```
 
-Then you will need to edit the following line of the `/opt/sii/lumext/etc/config.json` file:
+Then you will need to edit the following line of the `/opt/sii/lumext/etc/config.yaml` file:
 
-```json
-{
-    "rabbitmq": {
-        "server": "<address of rmq server>",
-        "port": "<tcp port of rmq server>",
-        "user": "<amqp username>",
-        "password": "<amqp password>",
-        "exchange": "<configured exchange on vCD>",
-        "queue": "sii-lumext",
-        "routing_key": "sii-lumext",
-        "use_ssl": true // true/false depending on your rmq server
-    },
-    "ldap": {
-        "address": "ldaps://---------:636", // ldap address starting with ldap:// or ldaps://
-        "user": "user@domain", // username for LDAP administration
-        "secret": "<ldap user password>",
-        "base": "dc=domain,dc=tld", // LDAP base path to use as a root for OU creation(s)
-        "domain": "domain.tld", // name of the LDAP domain
-        "search_timeout": 5, // seconds
-        "operation_timeout": 5, // seconds
-        "cacert_file": "/etc/ssl/certs/ca-certificates.crt", // If LDAPs is used
-        "userAccountControl": 66048 // Default mode for user creation (66048: no password expiration + user activated)
-    },
-    "log": {
-        "config_path": "/opt/sii/lumext/etc/logging.json" // path to the log configuration file
-    }
-}
+```yaml
+rabbitmq:
+  server: rmq.domain # address of rabbitmq server
+  port: 5672 # tcp port of rabbitmq server
+  user: svc-user # amqp username
+  password: "**********" # amqp password
+  exchange: systemExchange # configured exchange for vCD
+  queue: sii-lumext
+  routing_key: sii-lumext
+  use_ssl: true # true/false depending on your rmq server
+
+ldap:
+  address: ldaps://---------:636 # ldap address starting with ldap:// or ldaps://
+  user: user@domain # username for LDAP administration
+  secret: "***********" # password for LDAP administration
+  base: dc=domain,dc=tld # LDAP base path to use as a root for OU creation(s)
+  domain: domain.tld # name of the LDAP domain
+  search_timeout: 5 # seconds
+  operation_timeout: 5 # seconds
+  cacert_file: /etc/ssl/certs/ca-certificates.crt # If LDAPs is used
+  userAccountControl: 66048 # Default mode for user creation:
+                            # - (66048: no password expiration + user activated)
+
+log:
+  config_path: /opt/sii/lumext/etc/logging.json
 ```
 
-> Remove all ``//.*`` comments as it it not supported in JSON syntax.
+> **Note about LDAPs certificates:**
+>
+> To use LDAPs, a *cacert* file is mandatory to validate the certificate submitted by the server. You can use a custom CA cert chain (*PEM format*) or, if you use a certificate signed by an OS-trusted CA, use the OS declaration of the trusted certificates.
+>
+> Please refer to [`Python-LDAP` library documentation](https://www.python-ldap.org/en/latest/index.html) for more details.
 
 #### Test
 
@@ -198,7 +206,7 @@ After="network-online.target"
 
 [Service]
 Environment="LUMEXT_HOME=/opt/sii/lumext"
-Environment="LUMEXT_CONFIGURATION_FILE_PATH=/opt/sii/lumext/etc/config.json"
+Environment="LUMEXT_CONFIGURATION_FILE_PATH=/opt/sii/lumext/etc/config.yaml"
 WorkingDirectory=/opt/sii/lumext
 ExecStart=/opt/sii/lumext/lumext-venv/bin/python -m lumext_api
 Restart=on-failure

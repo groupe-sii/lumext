@@ -7,8 +7,7 @@ import sys
 import os
 
 # PIP imports
-import simplejson as json
-from python_json_config import ConfigBuilder
+import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -80,15 +79,15 @@ def validate_configuration_path(env):
         print(f"""Missing environment variable `{env}`.
 
 Please:
-1. copy the `config.sample.json` file to a new location.
+1. copy the `config.sample.yaml` file to a new location.
 2. Configure the copy with your settings.
 3. Export the environment variable `{env}`
 
 Ex:
 ```
 mkdir -p /opt/lumext/etc
-cp config.sample.json /opt/sii/lumext/etc/config.json
-export {env}=/opt/sii/lumext/etc/config.json
+cp config.sample.yaml /opt/sii/lumext/etc/config.yaml
+export {env}=/opt/sii/lumext/etc/config.yaml
 ```
         """)
         sys.exit(-1)
@@ -100,14 +99,14 @@ Please check that environment variable `{env}` is
 correctly setted.
         """)
         sys.exit(-1)
-    with open(config_path) as json_config:
+    with open(config_path) as yaml_config:
         try:
-            json.load(json_config)
-        except json.errors.JSONDecodeError:
+            yaml.load(yaml_config, Loader=yaml.SafeLoader)
+        except yaml.scanner.ScannerError:
             print(f"""Invalid syntax in configuration file: {config_path}
 
 Please check that the content of the configuration file is a
-valid JSON document.
+valid YAML document.
         """)
             sys.exit(-1)
     return
@@ -121,10 +120,11 @@ def configuration_manager():
     """
     # Read config path from rnv settings.
     config_path = os.environ.get("LUMEXT_CONFIGURATION_FILE_PATH")
-    # create config parser
-    builder = ConfigBuilder()
+    # load config file
+    with open(config_path) as yaml_config:
+        c = yaml.load(yaml_config, Loader=yaml.SafeLoader)
     # parse config
-    return builder.parse_config(config_path)
+    return dict2obj(c)
 
 
 def list_get(arr: list, index: int, default: any = None):
@@ -145,3 +145,26 @@ def list_get(arr: list, index: int, default: any = None):
         return arr[index]
     except IndexError:
         return default
+
+
+def dict2obj(d):
+    """Convert a dict to an object.
+
+    Args:
+        d (dict): Dict to convert.
+
+    Returns:
+        object: Converted object.
+    """
+    if isinstance(d, list):
+        d = [dict2obj(x) for x in d]
+    if not isinstance(d, dict):
+        return d
+
+    class C(object):
+        pass
+
+    o = C()
+    for k in d:
+        o.__dict__[k] = dict2obj(d[k])
+    return o

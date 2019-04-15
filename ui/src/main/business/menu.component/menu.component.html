@@ -1,0 +1,25 @@
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" [(clrVerticalNavCollapsed)]="collapsed" class="menu-max-height">
+    <div class="menu-separated">
+        <div>
+            <div class="nav-group-content">
+                <button class="menu-parent" (click)="subVisible = !subVisible"
+                    [ngClass]="{'selected': route ==='group' || route ==='user', 'no-selected': route !=='group' && route !=='user'}">
+                    <div class="text-parent-menu">
+                        LDAP management
+                    </div>
+                    <clr-icon shape="angle" [ngClass]="{'rotateX': subVisible, 'unrotateX': !subVisible}"></clr-icon>
+                </button>
+            </div>
+            <div *ngIf="subVisible">
+                <a clrVerticalNavLink routerLink="./group" class="no-selected"
+                    [ngClass]="{selected: route ==='group', 'no-selected': route !=='group'}" class="child-menu">
+                    Groups
+                </a>
+                <a clrVerticalNavLink routerLink="./user" class="no-selected"
+                    [ngClass]="{selected: route ==='user', 'no-selected': route !=='user'}" class="child-menu">
+                    Users
+                </a>
+            </div>
+        </div>
+    </div>
+</clr-vertical-nav>

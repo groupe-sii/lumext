@@ -2,3 +2,8 @@
 **/__pycache__/
 # Avoid pushing real configuration
 api/config.json
+
+#ui
+node_modules
+dist
+package-lock.json

@@ -1,0 +1,240 @@
+<div class="content-area">
+  <h2 class="dashboard-header">User</h2>
+  <div>
+    <clr-datagrid [(clrDgSingleSelected)]="selectedUser" [clrDgLoading]="userdatagridloading">
+      <clr-dg-column>Login</clr-dg-column>
+      <clr-dg-column>Name</clr-dg-column>
+      <clr-dg-column>Description</clr-dg-column>
+
+      <clr-dg-row *clrDgItems="let user of users" [clrDgItem]="user">
+        <clr-dg-cell>{{user.login}}</clr-dg-cell>
+        <clr-dg-cell>{{user.display_name}}</clr-dg-cell>
+        <clr-dg-cell>{{user.description}}</clr-dg-cell>
+      </clr-dg-row>
+      <clr-dg-footer>
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of
+        {{pagination.totalItems}} users
+        <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+    <button role="tooltip" aria-haspopup="true"
+      class="tooltip tooltip-sm tooltip-top-right hover btn btn-sm btn-link button-refresh" (click)="getUsers()">
+      <clr-icon shape="refresh"></clr-icon>
+      <span class="tooltip-content tooltip-refresh">Refresh user list</span>
+    </button>
+    <button class="btn btn-sm btn-secondary" (click)="openUserModal()" [disabled]="userdatagridloading">Create
+      user</button>
+    <button class="btn btn-sm btn-secondary" (click)="userdetailsmodal = true"
+      [disabled]="userdatagridloading || !selectedUser">Edit user</button>
+    <button class="btn btn-sm btn-secondary" (click)="passwordmodal  = true"
+      [disabled]="userdatagridloading || !selectedUser">Reset password</button>
+    <button class="btn btn-sm btn-secondary" (click)="deleteUser()"
+      [disabled]="userdatagridloading || !selectedUser">Delete user</button>
+
+
+    <!---------------------------CREATE------------------------------------------------>
+
+    <form (ngSubmit)="createUserSubmit()" [hidden]="submitted" novalidate>
+      <clr-modal [(clrModalOpen)]="useraddmodal" [clrModalSize]="'x0.5'">
+        <h3 class="modal-title">Create user</h3>
+        <div class="modal-body">
+          <section class="form-block">
+            <div class="form-line">
+              <div class="form-group" [formGroup]="useraddform">
+                <div class="input-group" [ngClass]="{'invalid-input': isInvalid(useraddform, 'login')}">
+                  <input type="text" id="login" formControlName="login" placeholder="Login *">
+                  <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-left">
+                    <clr-icon class="clr-validate-icon icon-error" shape="exclamation-circle"
+                      [ngClass]="{'icon-transparent' : !isInvalid(useraddform, 'login')}">
+                    </clr-icon>
+                    <span class="tooltip-content error-message" *ngIf="isInvalid(useraddform, 'login')">Invalid
+                      syntax for login: Valid special characters are: . - _</span>
+                  </a>
+                </div>
+              </div>
+              <div class="form-group" [formGroup]="useraddform">
+                <div class="input-group" [ngClass]="{'invalid-input': isInvalid(useraddform, 'display_name')}">
+                  <input type="text" class="clr-input input" id="display_name" formControlName="display_name"
+                    placeholder="Name *">
+                  <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-left">
+                    <clr-icon class="clr-validate-icon icon-error" shape="exclamation-circle"
+                      [ngClass]="{'icon-transparent' : !isInvalid(useraddform, 'display_name')}">
+                    </clr-icon>
+                    <span class="tooltip-content error-message" *ngIf="isInvalid(useraddform, 'display_name')">Invalid
+                      syntax for name: Only letters, numbers and space are allowed.</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="form-line password-line">
+              <div class="form-group" [formGroup]="useraddform">
+                <div class="input-group" [ngClass]="{'invalid-input': isInvalid(useraddform, 'password')}">
+                  <input [type]="visiblePassword ? 'text' : 'password'" id="password" formControlName="password"
+                    (change)="testConfirmPassword()" placeholder="Password *">
+                  <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-left">
+                    <clr-icon class="clr-validate-icon icon-error" shape="exclamation-circle"
+                      [ngClass]="{'icon-transparent' : !isInvalid(useraddform, 'password')}">
+                    </clr-icon>
+                    <span class="tooltip-content error-message" *ngIf="isInvalid(useraddform, 'password')">Invalid
+                      syntax. Password must be between 8 and 127 characters.</span>
+                  </a>
+                  <a (click)="visiblePassword = !visiblePassword">
+                    <clr-icon shape="eye" class="icon-visible" *ngIf="!visiblePassword"></clr-icon>
+                    <clr-icon shape="eye-hide" class="icon-visible" *ngIf="visiblePassword"></clr-icon>
+                  </a>
+                </div>
+              </div>
+              <div class="form-group" [formGroup]="useraddform">
+                <div class="input-group"
+                  [ngClass]="{'invalid-input': isInvalid(useraddform, 'passwordConfirm')}">
+                  <input type="password" id="passwordConfirm" formControlName="passwordConfirm"
+                    placeholder="Password confirm *">
+                  <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-left">
+                    <clr-icon class="clr-validate-icon icon-error" shape="exclamation-circle"
+                      [ngClass]="{'icon-transparent' : !isInvalid(useraddform, 'passwordConfirm')}">
+                    </clr-icon>
+                    <span class="tooltip-content error-message"
+                      *ngIf="isInvalid(useraddform, 'passwordConfirm')">Password
+                      and password confirmation must match.</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="form-line button-generate">
+              <div class="div-password">
+                <button class="btn btn-link" type="button" (click)="passwordGenerator(useraddform)">
+                  <clr-icon shape="key"></clr-icon>
+                  Generate strong password
+                </button>
+              </div>
+            </div>
+            <div class="form-line line-description">
+              <div class="form-group textarea-group" [formGroup]="useraddform">
+                <textarea id="description" formControlName="description" placeholder="Description" ngModel></textarea>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="createUserCancel(useraddform)">Cancel</button>
+          <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': useraddform.invalid}">Create</button>
+        </div>
+      </clr-modal>
+    </form>
+
+    <!---------------------------EDIT------------------------------------------------>
+
+    <form (ngSubmit)="userDetailsSubmit()" [hidden]="submitted" novalidate *ngIf="selectedUser">
+      <clr-modal [(clrModalOpen)]="userdetailsmodal" [clrModalSize]="'x0.5'">
+        <h3 class="modal-title">Edit user</h3>
+        <div class="modal-body">
+          <section class="form-block">
+            <div class="form-line">
+              <div class="form-group" [formGroup]="userdetailsform">
+                <div class="input-group"
+                  [ngClass]="{'invalid-input': isInvalid(userdetailsform, 'login')}">
+                  <input type="text" id="login" formControlName="login" placeholder="Login *"
+                    [ngModel]="selectedUser.login">
+                  <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-left">
+                    <clr-icon class="clr-validate-icon icon-error" shape="exclamation-circle"
+                      [ngClass]="{'icon-transparent' : !isInvalid(userdetailsform, 'login')}">
+                    </clr-icon>
+                    <span class="tooltip-content error-message"
+                      *ngIf="isInvalid(userdetailsform, 'login')">Invalid
+                      syntax for login: Valid special characters are: . - _</span>
+                  </a>
+                </div>
+              </div>
+              <div class="form-group" [formGroup]="userdetailsform">
+                <div class="input-group"
+                  [ngClass]="{'invalid-input': isInvalid(userdetailsform, 'display_name')}">
+                  <input type="text" class="clr-input input" id="display_name" formControlName="display_name"
+                    placeholder="Name *" [ngModel]="selectedUser.display_name">
+                  <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-left">
+                    <clr-icon class="clr-validate-icon icon-error" shape="exclamation-circle"
+                      [ngClass]="{'icon-transparent' : !isInvalid(userdetailsform, 'display_name')}">
+                    </clr-icon>
+                    <span class="tooltip-content error-message"
+                      *ngIf="isInvalid(userdetailsform, 'display_name')">Invalid
+                      syntax for name: Only letters, numbers and space are allowed.</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="form-line">
+              <div class="form-group textarea-group" [formGroup]="userdetailsform">
+                <textarea id="description" formControlName="description" placeholder="Description"
+                  [ngModel]="selectedUser.description"></textarea>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="userDetailsCancel(userdetailsform)">Cancel</button>
+          <button type="submit" class="btn btn-primary"
+            [ngClass]="{'disabled': userdetailsform.invalid}">Update</button>
+        </div>
+      </clr-modal>
+    </form>
+    <!--------------------------------------------------------------------------->
+    <form (ngSubmit)="changePasswordSubmit()" [hidden]="submitted" novalidate>
+      <clr-modal [(clrModalOpen)]="passwordmodal" [clrModalSize]="'x0.5'">
+        <h3 class="modal-title">Reset password</h3>
+        <div class="modal-body">
+          <section class="form-block">
+            <div class="form-line password-line">
+              <div class="form-group" [formGroup]="passwordform">
+                <div class="input-group"
+                  [ngClass]="{'invalid-input': isInvalid(passwordform, 'password')}">
+                  <input [type]="visiblePassword ? 'text' : 'password'" id="password" formControlName="password"
+                    (change)="testConfirmPassword()" placeholder="Password *">
+                  <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-left">
+                    <clr-icon class="clr-validate-icon icon-error" shape="exclamation-circle"
+                      [ngClass]="{'icon-transparent' : !isInvalid(passwordform, 'password')}">
+                    </clr-icon>
+                    <span class="tooltip-content error-message"
+                      *ngIf="isInvalid(passwordform, 'password')">Invalid
+                      syntax. Password must be between 8 and 127 characters.</span>
+                  </a>
+                  <a (click)="visiblePassword = !visiblePassword">
+                    <clr-icon shape="eye" class="icon-visible" *ngIf="!visiblePassword"></clr-icon>
+                    <clr-icon shape="eye-hide" class="icon-visible" *ngIf="visiblePassword"></clr-icon>
+                  </a>
+                </div>
+              </div>
+              <div class="form-group" [formGroup]="passwordform">
+                <div class="input-group"
+                  [ngClass]="{'invalid-input': isInvalid(passwordform, 'passwordConfirm')}">
+                  <input type="password" id="passwordConfirm" formControlName="passwordConfirm"
+                    placeholder="Password confirm *">
+                  <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-left">
+                    <clr-icon class="clr-validate-icon icon-error" shape="exclamation-circle"
+                      [ngClass]="{'icon-transparent' : !isInvalid(passwordform, 'passwordConfirm')}">
+                    </clr-icon>
+                    <span class="tooltip-content error-message"
+                      *ngIf="isInvalid(passwordform, 'passwordConfirm')">Password
+                      and password confirmation must match.</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="form-line button-generate">
+              <div class="div-password">
+                <button class="btn btn-link" type="button" (click)="passwordGenerator(passwordform)">
+                  <clr-icon shape="key"></clr-icon>
+                  Generate strong password
+                </button>
+              </div>
+            </div>
+          </section>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" (click)="userPasswordCancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': passwordform.invalid}">Update</button>
+          </div>
+        </div>
+      </clr-modal>
+    </form>
+
+
+  </div>
+</div>

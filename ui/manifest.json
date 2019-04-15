@@ -1,0 +1,14 @@
+{
+    "urn": "vmware:vcloud:lumext",
+    "name": "Lumext",
+    "containerVersion": "9.1.0",
+    "version": "0.0.1",
+    "scope": ["tenant"],
+    "permissions": [],
+    "description": "LUMext is a vCD UI & API extension to manage organisation's users and groups through vCloud Director.",
+    "vendor": "SII",
+    "license": "",
+    "link": "",
+    "module": "LumextModule",
+    "route": "lumext"
+}

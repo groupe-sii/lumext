@@ -1,8 +1,12 @@
 from distutils.core import setup
 import setuptools
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+long_description = """LDAP user management extension for vCloud Director >=9.1
+
+LUMext is a vCD UI & API extension to manage LDAP-based organisation's users and groups through *VMware vCloud Director*.
+
+This extension aims to provide a way to share a single LDAP server for multiple organisations to simplify the user management.
+"""
 
 setup(
     name='lumext_api',
@@ -16,7 +20,7 @@ setup(
     install_requires=[
         "VcdExtMessageWorker",
         "coloredlogs",
-        "python-json-config",
+        "pyyaml",
         "python-ldap",
         "simplejson",
     ],
