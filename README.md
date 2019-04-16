@@ -240,6 +240,11 @@ LUMExt-UI is a vCloud Director plugin that extends the HTML5 UI. Once deployed, 
 
 Please download the last version of `plugin.zip` from the releases files of the github project: [lumext/release](https://github.com/groupe-sii/lumext/releases/latest), copy it to the `ui` folder of the project clone.
 
+```bash
+cd ui
+curl https://github.com/groupe-sii/lumext/releases/download/v1.0/plugin.zip > ./plugin.zip
+```
+
 #### from vCD >=9.1 to 9.5
 
 Use the provided script from the `ui` folder to deploy the LUMExt-UI plugin in vCloud Director.

@@ -10,9 +10,9 @@ This extension aims to provide a way to share a single LDAP server for multiple 
 
 setup(
     name='lumext_api',
-    version='0.1',
-    author="Ludovic Rivallain, Camille Kessab",
-    author_email='ludovic.rivallain@gmail.com',
+    version='1.0',
+    author="SII Group, Ludovic Rivallain, Camille Kessab",
+    url="https://github.com/groupe-sii/lumext",
     packages=setuptools.find_packages(),
     description="LUMext is a vCD UI & API extension to manage LDAP-based organisation's users through vCD.",
     long_description=long_description,
@@ -25,8 +25,11 @@ setup(
         "simplejson",
     ],
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
         "Operating System :: OS Independent",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Development Status :: 5 - Production/Stable"
     ],
     entry_points={
         'console_scripts': [
