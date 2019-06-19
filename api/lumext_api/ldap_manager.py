@@ -4,7 +4,6 @@
 import logging
 import ldap
 import ldap.modlist
-import simplejson as json
 
 from .utils import list_get, configuration_manager as cm
 
