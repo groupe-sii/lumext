@@ -44,11 +44,11 @@ class MessageWorker(Thread):
         try:
             if not self.uri.split('/')[1] == "lumext":
                 self.proceed_response(
-                    400, "Invalid application requested. Only managing LUMExt here."
+                    "Invalid application requested. Only managing LUMExt here.", 400
                 )
             self.org_id = self.uri.split('/')[0]
         except IndexError:
-            self.proceed_response(400, f"Invalid URI for request: {self.uri}")
+            self.proceed_response(f"Invalid URI for request: {self.uri}", 400)
         self.method = self.request['method'].upper()
         self.query_str = self.request.get('queryString')
         self.user = self.metadata['user'].split("urn:vcloud:user:")[1]
@@ -64,7 +64,7 @@ class MessageWorker(Thread):
         try:
             data = base64.b64decode(self.request['body'])
         except binascii.Error:
-            self.proceed_response(400, "Invalid base64 content for request body")
+            self.proceed_response("Invalid base64 content for request body", 400)
         try:
             self.body = json.loads(data)
         except json.decoder.JSONDecodeError:
@@ -79,14 +79,14 @@ class MessageWorker(Thread):
         logger.info(f"Proceeding request message: {self.method} {self.uri}")
         self.object_type = list_get(self.uri.split('/'), 2)
         if not self.object_type:
-            self.proceed_response(404, "No object type specified.")
+            self.proceed_response("No object type specified.", 404)
         if self.object_type == "user":
             self.proceed_user_message()
         # elif self.object_type == "group":
         #     self.proceed_group_message()
         else:
             self.proceed_response(
-                404, f"Invalid object type specified: {self.object_type}"
+                f"Invalid object type specified: {self.object_type}", 404
             )
 
     def proceed_user_message(self):
