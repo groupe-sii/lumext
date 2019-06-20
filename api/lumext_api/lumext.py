@@ -130,15 +130,10 @@ class MessageWorker(Thread):
     def proceed_response(self, body, code: int=200):
         """Respond to the initial request
         """
-        try:
-            # Parse error message to get HTTP code (ex: "404: Not found")
-            if isinstance(body, str):
-                code = int(body.split(':')[0].strip())
-                body = body.split(':')[1].strip()
-        except Exception as e:
-            logger.critical(f"Cannot determine response code from body: {body}/{str(e)}.")
-            code = 500
-            body = "Server error in response parsing."
+        # Parse error message to get HTTP code (ex: "404: Not found")
+        if isinstance(body, str) and len(body.split(':')) > 1:
+            code = int(body.split(':')[0].strip())
+            body = body.split(':')[1].strip()
         # Send response
         self.response_properties['statusCode'] = code
         if code >= 400: # convert str to dict
