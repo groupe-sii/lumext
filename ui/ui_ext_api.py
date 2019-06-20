@@ -229,4 +229,4 @@ if __name__ == '__main__':
         pprint(ui.getUiExtensions().json())
     else:
         raise ValueError('Command (%s) not found' % args.command)
-        sys.exit(0)
+    sys.exit(0)

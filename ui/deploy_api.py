@@ -145,4 +145,4 @@ if __name__ == '__main__':
         api.delete_extension(extension_name)
     else:
         raise ValueError('Command (%s) not found' % args.command)
-        sys.exit(0)
+    sys.exit(0)
