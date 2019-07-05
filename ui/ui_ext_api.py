@@ -212,7 +212,7 @@ if __name__ == '__main__':
     parser.add_argument("--folder", "-f", help="Folder where is plugin.zip and manifest.json", required=True)
     args = parser.parse_args()
 
-    vcduri = "https://" + args.vcduri
+    vcduri = "https://" + args.server
     user = args.user
     password = args.password
     folder = args.folder
@@ -229,4 +229,4 @@ if __name__ == '__main__':
         pprint(ui.getUiExtensions().json())
     else:
         raise ValueError('Command (%s) not found' % args.command)
-        sys.exit(0)
+    sys.exit(0)

@@ -126,7 +126,7 @@ if __name__ == '__main__':
     parser.add_argument("--extension_name", "-n", help="Extension name", required=True)
     args = parser.parse_args()
 
-    vcduri = "https://" + args.vcduri
+    vcduri = "https://" + args.server
     user = args.user
     password = args.password
     extension_file = args.extension_file
@@ -145,4 +145,4 @@ if __name__ == '__main__':
         api.delete_extension(extension_name)
     else:
         raise ValueError('Command (%s) not found' % args.command)
-        sys.exit(0)
+    sys.exit(0)
